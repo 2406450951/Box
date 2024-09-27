@@ -8,12 +8,20 @@ def static buildTime() {
 }
 
 android {
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            universalApk true
+        }
+    }
     compileSdk 34
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc.tk'
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0.".concat(buildTime())
         multiDexEnabled true

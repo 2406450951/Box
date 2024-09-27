@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.PermissionChecker;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.custom.AppStartDialog;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
@@ -50,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
     private LoadService mLoadService;
 
     private static float screenRatio = -100.0f;
-
+    public static boolean startFlag=true;
     // takagen99 : Fix for Locale change not persist on higher Android version
     @Override
     protected void attachBaseContext(Context base) {
@@ -68,6 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         try {
             if (screenRatio < 0) {
                 DisplayMetrics dm = new DisplayMetrics();
@@ -104,6 +107,15 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         AppManager.getInstance().addActivity(this);
         init();
         setScreenOn();
+        //弹窗
+        AppStartDialog.showReminder(this);
+        //5分钟后停止
+        // 延迟 5 分钟执行退出操作
+        new Handler().postDelayed(() -> {
+            // 5 分钟后退出应用程序
+            finish();
+            System.exit(0);
+        }, 5 * 60 * 1000); // 5 分钟 = 5 * 60 * 1000 毫秒
     }
 
     @Override
